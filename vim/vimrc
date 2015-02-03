@@ -1,0 +1,316 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Jeff Hetherly's vimrc file
+"
+" Requires the following plugins:
+"   Pathogen (package manager)
+"   Solarized (for color sceme)
+"   Surround (for easy surround mechanics)
+"
+" Contents:
+"   General
+"   VIM user interface
+"   Colors and Fonts
+"   Files and backups
+"   Text, tab and indent related
+"   Visual mode related
+"   Moving around, tabs and buffers
+"   Status line
+"   Editing mappings
+"   vimgrep searching and cope displaying
+"   Spell checking
+"   Misc
+"   Helper functions
+"
+" Mapping Summary:
+"   <Leader><Leader>+cmd    EasyMotion shortcut
+"   <Leader>t               New tab
+"   <Leader>xt              New explore tab
+"   <Leader>n               Next tab
+"   <Leader>p               Previous tab
+"   <Leader>v               New window, vertical split
+"   <Leader>s               New window, horizontal split
+"   <Leader>xv              New explore window, vertical split
+"   <Leader>xs              New explore window, horizontal split
+"   <Leader>h               Move to window on left
+"   <Leader>l               Move to window on right
+"   <Leader>j               Move to window on bottom
+"   <Leader>k               Move to window on top
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Remove vi compatiblity
+set nocompatible
+
+" Allows for 'gf' command to search current directory
+set path=$PATH:$PWD
+
+" Sets how many lines of history VIM has to remember
+set history=700
+
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+" Activate pathogen plugin manager
+execute pathogen#infect()
+
+"" Setup omnicomplete
+"set omnifunc=syntaxcomplete#Complete
+"set completeopt=menuone,longest,preview
+"" Limit popup menu height
+"set pumheight=15
+"au BufNewFile,BufRead,BufEnter *.cpp,*.hpp,*.cxx,*.C,*.h set omnifunc=omni#cpp#complete#Main
+"au FileType python set omnifunc=pythoncomplete#Complete
+"let g:SuperTabDefaultCompletionType="context"
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" With a map leader it's possible to do extra key combinations
+"let mapleader = "\\"
+"let g:mapleader = "\\"
+"let maplocalleader = " "
+let mapleader = " "
+let g:mapleader = " "
+let maplocalleader = "\\"
+
+" Show line number
+set number
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VIM user interface
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Turn on the WiLd menu
+"set wildmenu
+"set wildmode=full
+
+"" Ignore compiled files
+"set wildignore=*.obj,.git,*.o,*~,*.pyc
+
+"Always show current position
+set ruler
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" Ignore case when searching
+set ignorecase
+
+" When searching try to be smart about cases 
+set smartcase
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" Don't wrap long lines
+set nowrap
+"" Wrap long lines
+"set wrap
+
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+
+" Displays a colored bar on the right to give a recommended line length
+" (PEP 8 style)
+if exists('+colorcolumn')
+  set colorcolumn=79
+  hi ColorColumn ctermbg=lightgrey guibg=lightgrey
+else
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>120v.\+', -1)
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable syntax highlighting
+syntax enable
+
+if has('gui_running')
+    set background=light
+    "set background=dark
+else
+    set background=light
+    "set background=dark
+endif
+
+" Enable this for low-rez terminals
+let g:solarized_termcolors=256
+" Import color scheme
+colorscheme solarized
+
+" Set utf8 as standard encoding and en_US as the standard language
+set encoding=utf8
+
+if has('gui_running')
+  set guifont=Anonymice\ Powerline:h14
+endif
+
+" highlight everything in python
+let python_version_2=1
+"let python_highlight_all = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Files, backups and undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set smarttab
+set copyindent
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+" Enable folding by indentation
+set foldmethod=syntax
+set foldlevel=99
+
+" Disable autotab for C++ namespaces
+set cino=NN-s
+set cino=gN-s
+
+" Change whitespace rules for PEP 8 compliance
+autocmd Filetype python setlocal ts=4 sts=4 sw=4
+
+
+""""""""""""""""""""""""""""""
+" Visual mode related
+""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Moving around, tabs, windows and buffers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Allows the cursor more freedom
+set virtualedit=block
+"set virtualedit=all,onemore
+
+" Turns mouse on for supported environments (X11, MacVim, etc.)
+if has("mouse")
+  set mouse=a
+endif
+
+
+""""""""""""""""""""""""""""""
+" Status line
+""""""""""""""""""""""""""""""
+" Always show the status line
+set laststatus=2
+
+" Format the status line
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ %P\ \ %{SyntasticStatuslineFlag()}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Editing mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Easy windowing
+nmap <Leader>v :vsplit<CR>
+nmap <Leader>s :split<CR>
+nmap <Leader>xv :Vex<CR>
+nmap <Leader>xs :Sex<CR>
+nmap <Leader>j <C-w>j
+nmap <Leader>k <C-w>k
+nmap <Leader>h <C-w>h
+nmap <Leader>l <C-w>l
+" Easy tabs
+nmap <Leader>t :tabnew<CR>
+nmap <Leader>xt :Texplore<CR>
+nmap <Leader>n :tabn<CR>
+nmap <Leader>p :tabp<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vimgrep searching and cope displaying
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Misc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Airline settings
+let g:airline#extensions#tabline#enabled=1
+let g:airline_powerline_fonts=1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Helper functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Returns true if paste mode is enabled
+function! HasPaste()
+  if &paste
+    return 'PASTE MODE  '
+  endif
+  return ''
+endfunction
+
+" Edit a file on smuhpc
+function EditSmuHpc(...)
+  " first argument is taken to be the path to the file
+  " second argument is taken to be the hpc number
+  " both are optional
+  " e.g. ':call EditSmuHpc('workarea/', 2)' for directory
+  "      workarea in $HOME directory in smuhpc2
+  let scpString = 'edit scp://jhetherl@smuhpc'
+  if a:0 >= 2 && a:2 > 1 && a:2 < 7
+    let scpString = scpString . a:2
+  endif
+  let scpString = scpString . '.smu.edu/'
+  if a:0 >= 1 && !empty(a:1)
+    let scpString = scpString . a:1
+  endif
+  execute scpString
+endfunction
+
+" Edit a file on compute.physics
+function EditSmuCompute(...)
+  " first argument is taken to be the path to the file
+  " arguement is optional
+  " e.g. ':call EditSmuCompute('workarea/')' for directory
+  "      workarea in $HOME directory in compute.physics
+  let scpString = 'edit scp://jhetherl@compute.physics.smu.edu/'
+  if a:0 >= 1 && !empty(a:1)
+    let scpString = scpString . a:1
+  endif
+  execute scpString
+endfunction
+
+" Edit a file on lxplus
+function EditLxplus(...)
+  " first argument is taken to be the path to the file
+  " second argument is taken to be the hpc number
+  " both are optional
+  " e.g. ':call EditLxplus('workarea/', 2)' for directory
+  "      workarea in $HOME directory in lxplus2
+  let scpString = 'edit scp://jhetherl@lxplus'
+  if a:0 >= 2 && a:2 > 1 && a:2 < 7
+    let scpString = scpString . a:2
+  endif
+  let scpString = scpString . '.cern.ch/'
+  if a:0 >= 1 && !empty(a:1)
+    let scpString = scpString . a:1
+  endif
+  execute scpString
+endfunction
+
+nnoremap <silent> <F2>h :call EditSmuHpc()<CR>
+nnoremap <silent> <F2>l :call EditLxplus()<CR>
+nnoremap <silent> <F2>c :call EditSmuCompute()<CR>
+

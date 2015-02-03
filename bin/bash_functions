@@ -1,0 +1,57 @@
+#!/bin/bash
+# functions
+########################################################
+# This function is for quick login to smuhpc with an optional numeric argument
+#  to represent the hpc number
+#  Usage: to login to smuhpc - $ smuhpc
+#        to login to smuhpc2 - $ smuhpc 2
+function smuhpc {
+  if ! [[ "$1" =~ ^[0-9]*$ ]] ; then
+    exec >&2; echo "error: $1 is not a number or a blank";
+  fi
+  login="jhetherl@smuhpc$1.smu.edu"
+  ssh -Y $login
+}
+# Helper functions to copy files to smuhpc
+#  First argument is the file(s) to transfer
+#  Second argument is the directory on smuhpc to store them
+function tosmuhpc {
+  if ! [[ "$3" =~ ^[0-9]*$ ]] ; then
+    exec >&2; echo "error: $3 is not a number or a blank";
+  fi
+  scp -r $1 jhetherl@smuhpc$3.smu.edu:$2
+}
+# Helper function to copy files from smuhpc
+#  First argument is the file(s) on smuhpc to transfer
+#  Second argument is the directory on local pc to store them
+function fromsmuhpc {
+  if ! [[ "$3" =~ ^[0-9]*$ ]] ; then
+    exec >&2; echo "error: $3 is not a number or a blank";
+  fi
+  scp -r jhetherl@smuhpc$3.smu.edu:$1 $2
+}
+# This function is for quick login to compute.physics
+function smucompute {
+  ssh -Y jhetherl@compute.physics.smu.edu
+}
+function tosmucompute {
+  scp -r $1 jhetherl@compute.physics.smu.edu:$2
+}
+function fromsmucompute {
+  scp -r jhetherl@compute.physics.smu.edu:$1 $2
+}
+# This function is for quick login to lxplus
+function lxplus {
+  if ! [[ "$1" =~ ^[0-9]*$ ]] ; then
+    exec >&2; echo "error: $1 is not a number or a blank";
+  fi
+  login="jhetherl@lxplus$1.cern.ch"
+  ssh -Y $login
+#  ssh -Y jhetherl@lxplus.cern.ch
+}
+function tolxplus {
+  scp -r $1 jhetherl@lxplus.cern.ch:$2
+}
+function fromlxplus {
+  scp -r jhetherl@lxplus.cern.ch:$1 $2
+}

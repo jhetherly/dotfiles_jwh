@@ -1,0 +1,7 @@
+*.[oa]
+*~
+*.swp
+vim/vim/.netrwhist
+vim/vim/ctags-5.8/build/*
+vim/vim/bundle/vim-latex/ftplugin/tex.vim
+vim/vim/bundle/vim-latex/ftplugin/latex-suite/templates/beamer_smu.tex
