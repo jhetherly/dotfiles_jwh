@@ -144,6 +144,7 @@ endif
 
 " Enable this for low-rez terminals
 let g:solarized_termcolors=256
+let &t_Co=256
 " Import color scheme
 colorscheme solarized
 
