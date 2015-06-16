@@ -30,6 +30,16 @@ function fromsmuhpc {
   fi
   scp -r jhetherl@smuhpc$3.smu.edu:$1 $2
 }
+# This function is for quick login to SMU ManeFrame
+function maneframe {
+  ssh -Y jhetherl@mflogin01.hpc.smu.edu
+}
+function tomaneframe {
+  scp -r $1 jhetherl@mflogin01.hpc.smu.edu:$2
+}
+function frommaneframe {
+  scp -r jhetherl@mflogin01.hpc.smu.edu:$1 $2
+}
 # This function is for quick login to compute.physics
 function smucompute {
   ssh -Y jhetherl@compute.physics.smu.edu
