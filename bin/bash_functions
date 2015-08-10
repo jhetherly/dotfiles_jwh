@@ -8,6 +8,7 @@
 function smuhpc {
   if ! [[ "$1" =~ ^[0-9]*$ ]] ; then
     exec >&2; echo "error: $1 is not a number or a blank";
+    return
   fi
   login="jhetherl@smuhpc$1.smu.edu"
   ssh -Y $login
@@ -18,6 +19,7 @@ function smuhpc {
 function tosmuhpc {
   if ! [[ "$3" =~ ^[0-9]*$ ]] ; then
     exec >&2; echo "error: $3 is not a number or a blank";
+    return
   fi
   scp -r $1 jhetherl@smuhpc$3.smu.edu:$2
 }
@@ -27,18 +29,41 @@ function tosmuhpc {
 function fromsmuhpc {
   if ! [[ "$3" =~ ^[0-9]*$ ]] ; then
     exec >&2; echo "error: $3 is not a number or a blank";
+    return
   fi
   scp -r jhetherl@smuhpc$3.smu.edu:$1 $2
 }
 # This function is for quick login to SMU ManeFrame
 function maneframe {
-  ssh -Y jhetherl@mflogin01.hpc.smu.edu
+  lognum=$1
+  if [[ "${lognum}" == "" ]] ; then
+    lognum='1'
+  elif ! [[ "${lognum}" =~ ^[1-4]?$ ]] ; then
+    exec >&2; echo "error: ${lognum} is not a number between 1-4, will default to '1'";
+    lognum='1'
+  fi
+  login="jhetherl@mflogin0${lognum}.hpc.smu.edu"
+  ssh -Y $login
 }
 function tomaneframe {
-  scp -r $1 jhetherl@mflogin01.hpc.smu.edu:$2
+  lognum=$3
+  if [[ "${lognum}" == "" ]] ; then
+    lognum='1'
+  elif ! [[ "${lognum}" =~ ^[1-4]?$ ]] ; then
+    exec >&2; echo "error: ${lognum} is not a number between 1-4, will default to '1'";
+    lognum='1'
+  fi
+  scp -r $1 jhetherl@mflogin0${lognum}.hpc.smu.edu:$2
 }
 function frommaneframe {
-  scp -r jhetherl@mflogin01.hpc.smu.edu:$1 $2
+  lognum=$3
+  if [[ "${lognum}" == "" ]] ; then
+    lognum='1'
+  elif ! [[ "${lognum}" =~ ^[1-4]?$ ]] ; then
+    exec >&2; echo "error: ${lognum} is not a number between 1-4, will default to '1'";
+    lognum='1'
+  fi
+  scp -r jhetherl@mflogin0${lognum}.hpc.smu.edu:$1 $2
 }
 # This function is for quick login to compute.physics
 function smucompute {
